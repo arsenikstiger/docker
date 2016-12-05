@@ -1,7 +1,17 @@
 FROM openjdk:8-jdk
 
-RUN apt-get update && apt-get install -y git curl && rm -rf /var/lib/apt/lists/*
+# JENKINS + DOTNET CORE INSTALL
+RUN apt-get update \
+	&& apt-get install -y git curl \
+	&& apt-get install -y libunwind8 gettext \
+	&& rm -rf /var/lib/apt/lists/*
 
+# DOTNET CORE INSTALL
+RUN curl -sSL -o dotnet.tar.gz https://go.microsoft.com/fwlink/?LinkID=835021
+RUN mkdir -p /opt/dotnet && tar zxf dotnet.tar.gz -C /opt/dotnet
+RUN ln -s /opt/dotnet/dotnet /usr/local/bin
+
+# JENKINS INSTALL
 ENV JENKINS_HOME /var/jenkins_home
 ENV JENKINS_SLAVE_AGENT_PORT 50000
 
